@@ -62,7 +62,8 @@ namespace MicroOrm.Dapper.Repositories
         /// <returns></returns>
         public virtual TEntity Find(IDbTransaction transaction = null)
         {
-            return Find(null, transaction);
+            var queryResult = SqlGenerator.GetSelectFirst(null);
+            return FindAll(queryResult, transaction).FirstOrDefault();
         }
 
         /// <summary>
@@ -71,17 +72,26 @@ namespace MicroOrm.Dapper.Repositories
         public virtual TEntity Find(Expression<Func<TEntity, bool>> predicate, IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectFirst(predicate);
-            return Connection.QueryFirstOrDefault<TEntity>(queryResult.Sql, queryResult.Param);
+            return FindAll(queryResult, transaction).FirstOrDefault();
         }
 
         /// <summary>
         ///
         /// </summary>
 
-        public virtual TEntity Find<TChild1>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>> tChild1, IDbTransaction transaction = null)
+        public virtual TEntity Find<TChild1>(Expression<Func<TEntity, object>> tChild1, Expression<Func<TEntity, bool>> predicate, IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectFirst(predicate);
             return FindAll<TChild1>(queryResult, tChild1).FirstOrDefault();
+        }
+        
+        /// <summary>
+        ///
+        /// </summary>
+        public virtual async Task<TEntity> FindAsync(IDbTransaction transaction = null)
+        {
+            var queryResult = SqlGenerator.GetSelectFirst(null);
+            return (await FindAllAsync(queryResult, transaction)).FirstOrDefault();
         }
 
         /// <summary>
@@ -90,15 +100,6 @@ namespace MicroOrm.Dapper.Repositories
         public virtual async Task<TEntity> FindAsync<TChild1>(Expression<Func<TEntity, object>> tChild1, IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectFirst(null, tChild1);
-            return (await FindAllAsync<TChild1>(queryResult, tChild1, transaction)).FirstOrDefault();
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        public virtual async Task<TEntity> FindAsync<TChild1>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>> tChild1, IDbTransaction transaction = null)
-        {
-            var queryResult = SqlGenerator.GetSelectFirst(predicate, tChild1);
             return (await FindAllAsync<TChild1>(queryResult, tChild1, transaction)).FirstOrDefault();
         }
 
@@ -114,10 +115,10 @@ namespace MicroOrm.Dapper.Repositories
         /// <summary>
         ///
         /// </summary>
-        public virtual async Task<TEntity> FindAsync(IDbTransaction transaction = null)
+        public virtual async Task<TEntity> FindAsync<TChild1>(Expression<Func<TEntity, object>> tChild1, Expression<Func<TEntity, bool>> predicate, IDbTransaction transaction = null)
         {
-            var queryResult = SqlGenerator.GetSelectFirst(null);
-            return (await FindAllAsync(queryResult, transaction)).FirstOrDefault();
+            var queryResult = SqlGenerator.GetSelectFirst(predicate, tChild1);
+            return (await FindAllAsync<TChild1>(queryResult, tChild1, transaction)).FirstOrDefault();
         }
 
         #endregion Find
@@ -129,7 +130,8 @@ namespace MicroOrm.Dapper.Repositories
         /// </summary>
         public virtual IEnumerable<TEntity> FindAll(IDbTransaction transaction = null)
         {
-            return FindAll(predicate: null, transaction: transaction);
+            var queryResult = SqlGenerator.GetSelectAll(null);
+            return FindAll(queryResult, transaction);
         }
 
         /// <summary>
@@ -138,7 +140,7 @@ namespace MicroOrm.Dapper.Repositories
         public virtual IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> predicate, IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectAll(predicate);
-            return Connection.Query<TEntity>(queryResult.Sql, queryResult.Param, transaction);
+            return FindAll(queryResult, transaction);
         }
 
         /// <summary>
@@ -161,7 +163,7 @@ namespace MicroOrm.Dapper.Repositories
         /// <summary>
         ///
         /// </summary>
-        public virtual IEnumerable<TEntity> FindAll<TChild1>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>> tChild1, IDbTransaction transaction = null)
+        public virtual IEnumerable<TEntity> FindAll<TChild1>(Expression<Func<TEntity, object>> tChild1, Expression<Func<TEntity, bool>> predicate, IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectAll(predicate, tChild1);
             return FindAll<TChild1>(queryResult, tChild1, transaction);
@@ -257,7 +259,7 @@ namespace MicroOrm.Dapper.Repositories
         /// <summary>
         ///
         /// </summary>
-        public virtual async Task<IEnumerable<TEntity>> FindAllAsync<TChild1>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>> tChild1, IDbTransaction transaction = null)
+        public virtual async Task<IEnumerable<TEntity>> FindAllAsync<TChild1>(Expression<Func<TEntity, object>> tChild1, Expression<Func<TEntity, bool>> predicate, IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectAll(predicate, tChild1);
             return await FindAllAsync<TChild1>(queryResult, tChild1, transaction);

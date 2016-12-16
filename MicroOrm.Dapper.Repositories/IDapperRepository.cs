@@ -37,7 +37,7 @@ namespace MicroOrm.Dapper.Repositories
         /// <summary>
         ///
         /// </summary>
-        TEntity Find<TChild1>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>> tChild1, IDbTransaction transaction = null);
+        TEntity Find<TChild1>(Expression<Func<TEntity, object>> tChild1, Expression<Func<TEntity, bool>> predicate, IDbTransaction transaction = null);
 
         /// <summary>
         ///
@@ -47,7 +47,7 @@ namespace MicroOrm.Dapper.Repositories
         /// <summary>
         ///
         /// </summary>
-        Task<TEntity> FindAsync<TChild1>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>> tChild1, IDbTransaction transaction = null);
+        Task<TEntity> FindAsync<TChild1>(Expression<Func<TEntity, object>> tChild1, Expression<Func<TEntity, bool>> predicate, IDbTransaction transaction = null);
 
         /// <summary>
         ///
@@ -77,7 +77,7 @@ namespace MicroOrm.Dapper.Repositories
         /// <summary>
         ///
         /// </summary>
-        IEnumerable<TEntity> FindAll<TChild1>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>> tChild1, IDbTransaction transaction = null);
+        IEnumerable<TEntity> FindAll<TChild1>(Expression<Func<TEntity, object>> tChild1, Expression<Func<TEntity, bool>> predicate, IDbTransaction transaction = null);
 
         /// <summary>
         ///
@@ -98,7 +98,7 @@ namespace MicroOrm.Dapper.Repositories
         /// <summary>
         ///
         /// </summary>
-        Task<IEnumerable<TEntity>> FindAllAsync<TChild1>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>> tChild1, IDbTransaction transaction = null);
+        Task<IEnumerable<TEntity>> FindAllAsync<TChild1>(Expression<Func<TEntity, object>> tChild1, Expression<Func<TEntity, bool>> predicate, IDbTransaction transaction = null);
 
         /// <summary>
         ///
