@@ -82,7 +82,7 @@ namespace MicroOrm.Dapper.Repositories
         public virtual TEntity Find<TChild1>(Expression<Func<TEntity, object>> tChild1, Expression<Func<TEntity, bool>> predicate, IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectFirst(predicate, tChild1);
-            return FindAll<TChild1>(queryResult, tChild1, tran).FirstOrDefault();
+            return FindAll<TChild1>(queryResult, tChild1, transaction).FirstOrDefault();
         }
         
         /// <summary>
